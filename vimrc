@@ -44,7 +44,7 @@ let maplocalleader = "\\"
 "1번 위키(공개용)와 2번 위키(개인용)
 let g:vimwiki_list = [
     \{
-    \   'path': '~/git/johngrib.github.io/_wiki',
+    \   'path': '/mnt/f/GoogleDrive/PrivateWiki/_wiki',
     \   'ext' : '.md',
     \   'diary_rel_path': '.',
     \},
@@ -67,6 +67,8 @@ nnoremap <F4> :execute "VWS /" . expand("<cword>") . "/" <Bar> :lopen<CR>
 nnoremap <S-F4> :execute "VWB" <Bar> :lopen<CR>
 
 " wiki updated
+let g:md_modify_disabled = 0
+
 function! LastModified()
   if g:md_modify_disabled
     return
@@ -86,11 +88,11 @@ function! NewTemplate()
   let l:wiki_directory = v:false
 
   for wiki in g:vimwiki_list
-    if expand('%:p:h') . '/' == wiki.path
+    if expand('%:p:h') == wiki.path
       let l:wiki_directory = v:true
       break
     endif
-  endif
+  endfor
 
   if !l:wiki_directory
     return
@@ -126,6 +128,6 @@ endfunction
 
 augroup vimwikiauto
   autocmd BufWritePre *wiki/*.md call LastModified()
-  autocmd BufRead, BufNewFile *wiki/*.md call NewTemplate()
+  autocmd BufRead,BufNewFile *wiki/*.md call NewTemplate()
 augroup END
 
