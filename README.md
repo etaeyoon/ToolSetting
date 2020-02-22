@@ -1,14 +1,22 @@
 # ToolSetting
 
+## vim
 sudo apt-get install vim
 Plug: https://github.com/junegunn/vim-plug
 
 ref. vimrc file
 
-
+## git
 sudo apt-get install git gitk
 
-cuda install
+## source analysis
+sudo apt-get install ctags cscope
+cp mktrace.sh
+
+### shortcut 
+ref https://github.com/ronakg/quickr-cscope.vim
+
+## cuda install
 1. Remove nouveau 
 ref. https://askubuntu.com/questions/841876/how-to-disable-nouveau-kernel-driver
 
