@@ -13,6 +13,10 @@ sudo apt-get install git gitk
 sudo apt-get install ctags cscope
 cp mktrace.sh
 
+# universal-ctags
+sudo apt-get install universal-ctags cscope
+I should change mktrace.sh for universal-ctags
+
 ### shortcut 
 ref https://github.com/ronakg/quickr-cscope.vim
 

@@ -6,17 +6,23 @@ Plug 'majutsushi/tagbar' , {'on': 'Tagbar'}
 
 Plug 'wesleyche/SrcExpl', {'on': 'SrcExpl'}
 
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
-
 Plug 'altercation/vim-colors-solarized'
 
 Plug 'ronakg/quickr-cscope.vim'
 
 Plug 'vimwiki/vimwiki'
 
+Plug 'ycm-core/youcompleteme', {'do': 'python3.8 ./install.py --clang-completer'}
+
+Plug 'SirVer/ultisnips'
+
 call plug#end()
+
+"after sudo apt install build-essential cmake vim python3-dev, ycm will be
+"installed 
+"Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
+"Plug 'garbas/vim-snipmate'
 
 function! LoadCscope()
   let db = findfile("cscope.out", ".;")
@@ -44,7 +50,7 @@ let maplocalleader = "\\"
 "1번 위키(공개용)와 2번 위키(개인용)
 let g:vimwiki_list = [
     \{
-    \   'path': '/mnt/f/GoogleDrive/PrivateWiki/_wiki',
+    \   'path': '/mnt/d/UbuntuSpace/git/wiki/',
     \   'ext' : '.md',
     \   'diary_rel_path': '.',
     \},
