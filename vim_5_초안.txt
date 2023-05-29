@@ -1,0 +1,220 @@
+Contents
+- 기본 사용법 정리
+- 반복
+- 이동
+- 검색과 치환 (정규표현식)
+- 플러그인
+
+
+
+
+1. 끄적끄적
+
+
+
+
+몇 년?전에 같이 일하시던 분이 vim을 사용하시다가 지금 수행중인 작업을 좀 더 편하게 하시겠다며,
+
+자체 플러그인을 만들어서 배포해주시더군요. (그분은 최근에도 간간히 자체 플러그인을 만들어서
+
+사용하고 계시더군요.) 여튼 같이 일하시는 분들이 그 플러그인 덕분에 좀 편하게 작업하긴 했습니다.
+
+(꽤 오래전이라 근데 어떤 기능의 플러그인 이었는지는 기억이 안나네요. ㅡㅡ)
+
+저는 그 당시, 코드 분석을 위해서 ctags + cscope + NerdTree 등을 사용하고 있었습니다.
+
+vim으로 이런것도 되는구나 하며, 자체적으로 흐믓하게 사용....
+
+하지만, 저는 코드 분석을 차근차근 하는 것이 귀찮아서 그냥 prinft나 cout을 의심가는 곳에 다
+집어넣고 수행해서 찾았는데,.. 찾는데는 문제 없긴 했습니다. 이게 효율적인지는 좀 생각해보게 되더라구요..
+
+지금은 cscope나 ctag에 단축키 몇 개가 익숙해지고, vim에서 자꾸 코드 분석을 하다보니,
+vim에서 코드 분석하는 것이 편해졌습니다.
+
+vim 플러그인도 꽤 다양하고 많지만, 저는 몇 년째 두 가지 용도의 플러그인만 사용하고 있습니다.
+
+코드 분석과 기록을 위한 플러그인 입니다.
+
+
+2. 플러그인 설치
+
+
+
+
+저 같은 경우 vim-plug를 이용해서 필요한 플러그인을 설치하고 있습니다.
+
+Vundle (https://github.com/VundleVim/Vundle.vim)도 있지만, 어쩌다가 vim-plug를 먼저 사용하게 되어서...
+(둘 차이는 잘 모릅니다~)
+
+https://github.com/junegunn/vim-plug 에 vim-plug 설치 및 다른 플러그인 설치에 대한 가이드가 잘 나와 있습니다.
+
+vim-plug 설치는 vim이 설치되어 있는 상태에서 아래와 같이 입력해주고 실행하면 됩니다 (리눅스)
+
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+
+vim-plug을 이용해서 vim 플러그인을 설치하는 방법을 간단하게 소개하면 다음과 같습니다 (리눅스 기준)
+
+1. .vimrc를 열고 (없다면 home 경로에 (~/) .vimrc 파일을 생성)
+2. 다음과 같이 입력
+'''
+call plug#begin('~/.vim/plugged')
+
+Plug '플러그인이름', {옵션}
+
+call plug#end()
+'''
+3. 저장
+4. :PlugInstall 입력
+5. 다 설치되면 finished 어쩌구 하는 메시지가 나타납니다.
+
+저 같은 경우 아래와 같이 .vimrc에 입력해서 플러그인을 설치 후 사용하고 있습니다.
+
+'''
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'}
+
+Plug 'majutsushi/tagbar' , {'on': 'Tagbar'}
+
+Plug 'wesleyche/SrcExpl', {'on': 'SrcExpl'}
+
+Plug 'altercation/vim-colors-solarized'
+
+Plug 'ronakg/quickr-cscope.vim'
+
+Plug 'vimwiki/vimwiki'
+
+Plug 'mhinz/vim-startify'
+
+call plug#end()
+'''
+
+설치말고도 다양한 명령이 있는데, vim-plug github 페이지를 참고하시면 될꺼 같습니다.
+
+저는 이런 저런 플러그인들을 써 보고는 지워버렸습니다. 귀찮으니즘이 발동해서...
+
+vim 웹페이지에서 플러그인을 검색해서 찾아볼 수도 있고, (https://www.vim.org/scripts/script_search_results.php)
+플러그인만 잘 정리해둔 사이트도 있습니다 (https://vimawesome.com/). 저는 잘 사용하지 않지만...
+
+
+
+
+3. 코드 분석
+
+
+
+
+vim 기반으로 코드 분석을 좀 더 편하게 하기 위해서 다양한 블로그들이 유사한 방법을 제시하고 있는데요.
+
+기본적으로는 ctags + cscope 조합을 사용하고 있습니다.
+
+다음과 같이 설치하고,
+
+'''
+sudo apt-get install ctags cscope
+'''
+
+사용하면 됩니다.
+
+ctags는 소스코드 내에 있는 함수나 변수의 위치를 찾기 위한 정보를 tags 파일에 저장하고 사용하게 해 줍니다.
+(ctags에서 fork된 exuverant ctags나 universal-ctags도 있습니다.)
+cscope는 vim에서 변수, 함수 등을 검색하기 위해서 사용되는 tool?? 입니다.
+
+기본적인 사용법은...
+ctags는 ctags -R로 현재 디렉토리 및 하위 디렉토리의 모든 파일까지 tag를 생성하고, vim으로 분석할 코드가 있는 파일을 open 한 뒤,
+보고자 하는 변수나 함수 위에 커서를 올려두고, ctrl키와 ] 키를 누르면, 해당 변수나 함수가 선언된 위치로 이동합니다.
+ctrl 키와 t 키를 누르면 원래 위치로 돌아옵니다.
+
+cscope는 ctags 처럼 소스를 분석한 파일을 생성한 후, 명령어를 입력하면.. (참고: https://mkblog.co.kr/vim-linux-cscope-cmd/)
+예를 들어, cs find s 검색할함수/변수 를 입력하면, 해당 함수나 변수 심볼을 검색해서 보여줍니다.
+
+저 같은 경우 실제 코드 분석 시 cscope를 빈번하게 이용하게 되는데, 일일이 명령어를 입력하다 보니,
+나중에는 그게 불편해 지더군요.
+그래서 quickr-cscope.vim 플러그인 (https://github.com/ronakg/quickr-cscope.vim)을 사용해 오고 있습니다.
+이 플러그인은 cscope에 대한 일종의 단축키 지정입니다.
+이 플러그인을 설치한 후, 보고자 하는 함수나 변수에 커서를 위치 시킨 후
+\ s를 누르면 해당 함수나 변수를 검색할 수 있습니다.
+
+ctags와 cscope을 사용하려고 tags 파일이나 cscope* 파일을 생성하고, 경로 지정하고 하면 불편해서, 스크립트로 생성하도록 하고 있습니다 (다른 블로그들을 참고해서 만듦)
+
+이름.sh 파일을 생성하고, 해당 파일에 아래의 내용을 입력 후 저장합니다. 실행 권한을 주고, 분석하려는 코드가 있는 디렉토리로 이동해서 해당 스크립트를 생성하면,
+해당 디렉토리에 tags와 cscope* 파일이 생성됩니다. cscope를 실행하는 화면이 나타나는데, 수행이 다 끝나면 사용자가 직접 종료시켜야 합니다.
+이때는 ctrl d를 입력하면 됩니다. 그리고나서 위 사용법대로 사용하시면 됩니다.
+
+'''
+#!/bin/sh
+rm -rf cscope.file cscope.out
+rm -rf tags
+
+find . \( -name '*.c' -o -name '*.cpp' -o -name '*.cc' -o -name '*.h' -o -name '*.s' -o -name '*.S' \) -print > cscope.file
+ctags -R
+
+cscope -i cscope.file
+'''
+
+vim 실행 시 생성된 cscope* 파일을 자동으로 찾도록 하려면, .vimrc에 다음의 내용을 입력하고 저장해 두시면 됩니다.
+
+'''
+function! LoadCscope()
+let db = findfile("cscope.out", ".;")
+if(!empty(db))
+let path = strpart(db, 0, match(db, "/cscope.out$"))
+set nocscopeverbose " suppress 'duplicate connection' error
+exe "cs add " . db . " " . path
+set cscopeverbose
+endif
+endfunction
+au BufEnter /* call LoadCscope()
+'''
+
+위 처럼 설정해 두시면, 분석하려는 디렉토리로 가서 이름.sh (이 파일이 어디에 있던 상관은 없음)를 실행하고,
+vim으로 소스코드를 open 한 뒤, ctrl ]나 \ s 등의 단축키를 이용하셔서 함수나 변수 등을 이동하며 코드 분석하면 됩니다.
+
+tagbar라는 플러그인도 사용하고 있는데요. tagbar는 ctags와 연동해서??? 심볼 정보들을 보여주고, 해당 심볼 정보로 커서 이동 후 엔터를 치면,
+해당 심볼이 선언된 곳으로 이동합니다. 저는 해당 소스코드에 선언된 함수나 변수를 대략 볼때만 사용하고 평상시에는 거의 사용하지 않게 되더군요.
+
+nerdtree는 일종의 윈도우 탐색기 역할을 해주는 플러그인 입니다. vim을 실행시키고, :NERDTree 를 입력하면, 왼쪽에 새로운 창이 생기면서
+폴더 구조를 보여줍니다. ctrl w w 를 입력하면, 창끼리 이동가능합니다. 왼쪽 창으로 이동해서 원하는 파일을 선택하면 vim에서 해당 파일이 열립니다.
+
+
+4. 기록
+
+
+
+
+회사에서는 온라인으로 동기화 되는 노트?들을 막아놓거나, 정책적으로?? 회사에서 작성한 것을 온라인 상으로 올리지 못하게 하고 있습니다.
+저는 일하면서 알게된 다양한 tip이나 개발 환경 설정, tool 설정 및 사용법 등을 Local OneNote에 기록해서 사용하고 있었는데요.
+PC를 변경할 때, OneNote의 백업을 깜빡했다가 다 날렸습니다 (왜 그랬을까요...).
+그래서 회사 내에서 온라인으로 백업하면서 사용할 수 없을까 고민하다가, github.sec.samsung...를 이용하는 방법을 이용했는데요.
+회사 github에 private repo를 생성하고, 노트 (메모장) 작성 후 push했더니 백업은 가능한데, 노트로서의 기능이 너무 부실해서 알아보다가
+사용하기 시작한 것이 vim-wiki입니다.
+
+사용법도 시간을 크게 안들여도 되고, 설정 방법은 vim-wiki에 대해서 참고한 블로그에서 한 방식을 그대로 copy&paste 하면 되어서
+부담없이 시작해서, 지금까지 사용해 오고 있습니다.
+
+저는 vim을 실행하면, vim으로 작업했던 파일 목록이 보입니다 (vim-startify 플러그인). 거기서 index.md (vim-wiki 사용시 시작 점)을 열고
+작성하려는 노트 제목을 입력 후, 제목 위에서 엔터를 입력하면 노트가 생성되며, 생성된 노트가 open 됩니다.
+그러면 내용을 작성하고 저장 및 닫은 후, add/commit/push하는 스크립트 (자체적으로 간단하게 만든 스크립트)를 실행하면 회사 github에 있는 제 private repo에 업데이트 됩니다.
+기록하는데 있어서 다른 것에 대한 신경을 덜 쓰고 필요한 것들을 기록하며 작업하고 있습니다.
+
+vim wiki에 대해서 제가 참고한 블로그는 다음과 같습니다.
+
+https://johngrib.github.io/wiki/vimwiki/
+
+
+
+
+5. 정리
+
+
+
+
+제가 사용하는 몇몇 vim 플러그인까지 정리해 보았습니다.
+
+요세 다시 귀찮으니즘이 도지는거 같습니다. 이전까지는 호기심이 왕성해서
+
+일단 이것저것 설치도 해보고 시도도 해보고 했는데,
+
+호기심은 여전히 왕성한데, 저 대신 누가 시도해서 보여줬으면 하는 마음이 커지고 있는거 같네요...
